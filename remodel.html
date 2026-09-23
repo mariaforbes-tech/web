@@ -209,6 +209,8 @@ footer{background:var(--deep);color:rgba(241,243,248,.55);font-size:13px;padding
             <input name="nombre" autocomplete="name" required maxlength="80"></label>
           <label><span data-en="Phone number" data-es="Número de teléfono">Phone number</span>
             <input name="telefono" type="tel" inputmode="tel" autocomplete="tel" required maxlength="30"></label>
+          <label><span data-en="ZIP code" data-es="Código postal (ZIP)">ZIP code</span>
+            <input name="zip" inputmode="numeric" autocomplete="postal-code" required maxlength="5" pattern="[0-9]{5}"></label>
           <label><span data-en="What do you need? <em>Optional</em>" data-es="¿Qué necesitas? <em>Opcional</em>">What do you need? <em>Optional</em></span>
             <textarea name="necesita" rows="3" maxlength="600" data-en-ph="Example: full bathroom, keep the layout, around 5 x 8 ft" data-es-ph="Ejemplo: baño completo, misma distribución, más o menos 5 x 8 pies" placeholder="Example: full bathroom, keep the layout, around 5 x 8 ft"></textarea></label>
           <label class="up"><span data-en="Photos <em>Optional, up to 5</em>" data-es="Fotos <em>Opcional, hasta 5</em>">Photos <em>Optional, up to 5</em></span>
@@ -426,12 +428,14 @@ footer{background:var(--deep);color:rgba(241,243,248,.55);font-size:13px;padding
     var digits = tel.replace(/\D/g, '');
     if (!nombre) { err.textContent = lang === 'en' ? 'Add your name so we know who to ask for.' : 'Escribe tu nombre para saber por quién preguntar.'; form.nombre.focus(); return; }
     if (digits.length < 10) { err.textContent = lang === 'en' ? 'Add a 10-digit phone number, like 917 555 0134.' : 'Escribe un teléfono de 10 dígitos, por ejemplo 917 555 0134.'; form.telefono.focus(); return; }
+    var zip = form.zip.value.trim();
+    if (!/^\d{5}$/.test(zip)) { err.textContent = lang === 'en' ? 'Add your 5-digit ZIP code, like 11375.' : 'Escribe tu código postal de 5 dígitos, por ejemplo 11375.'; form.zip.focus(); return; }
     err.textContent = '';
     send.disabled = true;
     send.textContent = lang === 'en' ? 'Sending…' : 'Enviando…';
 
     var body = new URLSearchParams({
-      nombre: nombre, telefono: tel, necesita: form.necesita.value.trim().slice(0, 600), website: form.website.value, landing: LANDING, idioma: lang,
+      nombre: nombre, telefono: tel, zip: zip, necesita: form.necesita.value.trim().slice(0, 600), website: form.website.value, landing: LANDING, idioma: lang,
       utm_source: params.get('utm_source') || '', utm_campaign: params.get('utm_campaign') || '', utm_content: params.get('utm_content') || ''
     });
     var files = fotosIn && fotosIn.files ? [].slice.call(fotosIn.files, 0, 5) : [];
