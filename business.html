@@ -388,7 +388,7 @@ footer{background:var(--deep);color:rgba(241,243,248,.55);font-size:13px;padding
       img.src = url;
     });
   }
-  try { lang = localStorage.getItem('ps_lang') || ((navigator.language||'').toLowerCase().indexOf('es') === 0 ? 'es' : 'en'); } catch(e) {}
+  try { var qLang = new URLSearchParams(location.search).get('lang'); lang = (qLang === 'es' || qLang === 'en') ? qLang : (localStorage.getItem('ps_lang') || ((navigator.language||'').toLowerCase().indexOf('es') === 0 ? 'es' : 'en')); } catch(e) {}
 
   function setLang(l){
     lang = l;
